@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 def get_videos(channel):
 	# adapted from https://stackoverflow.com/a/74585946
 	options = webdriver.ChromeOptions()
+	options.add_argument("--log-level=3")
 	options.add_experimental_option("detach", True)
 	options.add_argument("--disable-extensions")
 	options.add_argument("--disable-notifications")
@@ -54,15 +55,21 @@ def compare(title):
 	return title
 
 if __name__ == '__main__':
-	if len(sys.argv) == 2:
+	if len(sys.argv) > 1:
 		channel = sys.argv[1]
+		outfile = open(sys.argv[2], 'w') if len(sys.argv) == 3 else None
+		
+		print("Getting videos from ", channel)
 		videos = get_videos(channel)
 	
+		print("Sorting results")
 		videos.sort(key=lambda dict: compare(dict['title']))
 	
+		print("Results")
 		for vid in videos:
-			print(vid['title'])
-		
+			print(vid['title'], file=outfile)
+		if outfile:
+			outfile.close()
 	else:
-		print('Usage: py script.py <channel>')
+		print('Usage: py script.py <channel> [outfile]')
 	
