@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 import argparse
-import sys
 import re
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -22,7 +21,6 @@ def get_videos(channel):
 	driver.get('https://www.youtube.com/@%s/videos' % channel)
 	time.sleep(3)
 
-	#item = []
 	prev_height = driver.execute_script("return document.documentElement.scrollHeight")
 
 	while True:
@@ -69,8 +67,9 @@ if __name__ == '__main__':
 		pattern = re.compile(args.sort)
 		videos.sort(key=lambda dict: compare(dict['title'], pattern))
 
-	print("Results")
 	outfile = open(args.outfile, 'w') if args.outfile else None
+	if not outfile:
+		print("Results:")
 
 	for vid in videos:
 		print(vid['title'], file=outfile)
