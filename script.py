@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
+import argparse
 import sys
 import re
 from selenium.webdriver.support.wait import WebDriverWait
@@ -47,29 +48,33 @@ def get_videos(channel):
 		
 	return data
 	
-pattern = re.compile(r'(\d{4}(\.\d{2}(\.\d{2})?)?)')
-def compare(title):
+def compare(title, pattern):
 	match = pattern.search(title)
 	if match:
 		return match.group()
 	return title
 
 if __name__ == '__main__':
-	if len(sys.argv) > 1:
-		channel = sys.argv[1]
-		outfile = open(sys.argv[2], 'w') if len(sys.argv) == 3 else None
-		
-		print("Getting videos from ", channel)
-		videos = get_videos(channel)
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--channel', '-c', help='channel name', type=str, required=True)
+	parser.add_argument('--outfile', '-o', help='output file', type=str)
+	parser.add_argument('--sort', '-s', help='regex for sorting', type=str)
+	args = parser.parse_args()
 	
+	print("Getting videos from ", args.channel)
+	videos = get_videos(args.channel)
+
+	if args.sort:
 		print("Sorting results")
-		videos.sort(key=lambda dict: compare(dict['title']))
-	
-		print("Results")
-		for vid in videos:
-			print(vid['title'], file=outfile)
-		if outfile:
-			outfile.close()
-	else:
-		print('Usage: py script.py <channel> [outfile]')
+		pattern = re.compile(args.sort)
+		videos.sort(key=lambda dict: compare(dict['title'], pattern))
+
+	print("Results")
+	outfile = open(args.outfile, 'w') if args.outfile else None
+
+	for vid in videos:
+		print(vid['title'], file=outfile)
+		
+	if outfile:
+		outfile.close()
 	
