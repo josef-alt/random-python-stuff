@@ -41,7 +41,7 @@ def list_distinct_headers(directory, extension, header_size):
             print(f"The directory '{directory}' does not exist.")
             return
 
-        headers = set()
+        headers = {}
 
         # Loop through the files in the directory
         for filename in os.listdir(directory):
@@ -53,12 +53,14 @@ def list_distinct_headers(directory, extension, header_size):
                 
                     # Convert to hexadecimal format
                     # display_header(bytes_read)
-                    headers.add(bytes_read)
+                    headers[bytes_read] = headers.get(bytes_read, 0) + 1
 
         # Display unique file headers
         if headers:
-            for header in headers:
-                display_header(header)
+            # display headers according to frequency
+            keys = sorted(headers.keys(), key=lambda k: -headers[k])
+            for key in keys:
+                display_header(key)
         else:
             print("The directory was empty")
 
