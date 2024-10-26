@@ -41,6 +41,8 @@ def list_distinct_headers(directory, extension, header_size):
             print(f"The directory '{directory}' does not exist.")
             return
 
+        headers = set()
+
         # Loop through the files in the directory
         for filename in os.listdir(directory):
             # Check if the file ends with the specified extension
@@ -50,7 +52,15 @@ def list_distinct_headers(directory, extension, header_size):
                     bytes_read = file.read(header_size)
                 
                     # Convert to hexadecimal format
-                    display_header(bytes_read)
+                    # display_header(bytes_read)
+                    headers.add(bytes_read)
+
+        # Display unique file headers
+        if headers:
+            for header in headers:
+                display_header(header)
+        else:
+            print("The directory was empty")
 
     except Exception as e:
         print(f"An error occurred: {e}")
