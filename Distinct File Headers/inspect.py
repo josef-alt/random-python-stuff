@@ -38,7 +38,7 @@ def list_distinct_headers(directory, extension, header_size):
     try:
         # Ensure the directory exists
         if not os.path.isdir(directory):
-            print(f"The directory '{directory}' does not exist.")
+            print(f'The directory \'{directory}\' does not exist.')
             return
 
         headers = {}
@@ -65,16 +65,16 @@ def list_distinct_headers(directory, extension, header_size):
             for key in keys:
                 display_header(key)
         else:
-            print("The directory was empty")
+            print('The directory was empty')
 
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f'An error occurred: {e}')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     if len(sys.argv) < 3 or len(sys.argv) > 4:
         # improper use case
-        print("Usage: python inspect.py <directory> <file_extension> [<limit>]")
+        print('Usage: python inspect.py <directory> <file_extension> [<limit>]')
     else:
         # grab parameters and call script
         dir_path = sys.argv[1]
