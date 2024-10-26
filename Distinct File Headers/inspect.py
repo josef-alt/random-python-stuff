@@ -3,6 +3,25 @@ import sys
 
 DEFAULT_HEADER_SIZE = 32
 
+def display_header(byte_data):
+    """
+    Display file headers in a human readable format.
+
+    Parameters:
+    byte_data (list): File header in byte format
+
+    Returns:
+    None
+	"""
+
+    if not byte_data:
+        print('No bytes found')
+    else:
+        hex_output = ' '.join(f'{byte:02x}' for byte in byte_data)
+        ascii_output = ' '.join(f'{chr(byte):>2}' for byte in byte_data)
+        print(f'First {header_size} bytes in hexadecimal: {hex_output}')
+        print(f'First {header_size} bytes in ascii text:  {ascii_output}')
+
 def list_distinct_headers(directory, extension, header_size):
     """
     List all distinct headers found in files with a specific extension.
@@ -31,10 +50,7 @@ def list_distinct_headers(directory, extension, header_size):
                     bytes_read = file.read(header_size)
                 
                     # Convert to hexadecimal format
-                    hex_output = ' '.join(f'{byte:02x}' for byte in bytes_read)
-                    ascii_output = ' '.join(f'{chr(byte):>2}' for byte in bytes_read)
-                    print(f'First {header_size} bytes in hexadecimal: {hex_output}')
-                    print(f'First {header_size} bytes in ascii text:  {ascii_output}')
+                    display_header(bytes_read)
 
     except Exception as e:
         print(f"An error occurred: {e}")
