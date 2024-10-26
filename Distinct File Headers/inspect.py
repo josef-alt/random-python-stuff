@@ -19,8 +19,8 @@ def display_header(byte_data):
     else:
         hex_output = ' '.join(f'{byte:02x}' for byte in byte_data)
         ascii_output = ' '.join(f'{chr(byte):>2}' for byte in byte_data)
-        print(f'First {header_size} bytes in hexadecimal: {hex_output}')
-        print(f'First {header_size} bytes in ascii text:  {ascii_output}')
+        print(f'hex   | {hex_output}')
+        print(f'ascii | {ascii_output}')
 
 def list_distinct_headers(directory, extension, header_size):
     """
@@ -57,6 +57,9 @@ def list_distinct_headers(directory, extension, header_size):
 
         # Display unique file headers
         if headers:
+            # display header size for clarity
+            print(f'Displaying the first {header_size} bytes')
+
             # display headers according to frequency
             keys = sorted(headers.keys(), key=lambda k: -headers[k])
             for key in keys:
